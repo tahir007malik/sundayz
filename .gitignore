@@ -11,6 +11,7 @@ __pycache__/
 .idea/
 *.swp
 *.sublime-workspace
+auxilary.txt
 
 # System files (macOS/Windows specific)
 .DS_Store  # macOS
