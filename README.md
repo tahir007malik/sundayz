@@ -2,5 +2,6 @@
 A simple, user-friendly app for "Sundayz" that lets customers explore flavors, view menu items &amp; place orders.
 
 ## Mind-Board
-1. Why? -> I wanted a hobby and found out it is quite interesting.
-2. Tech-Stack -> Python, Flask (Python Framework)
+1. Why: I wanted a hobby and found out my long lost love for app development is back 😅
+2. Vision: Let's focus and building the backend efficiently first and we will work on frontend
+3. Tech-Stack: Python, Flask (Python Framework)
