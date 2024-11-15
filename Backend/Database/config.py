@@ -1,4 +1,4 @@
-# Backend/config.py
+# Backend/Database/config.py
 import os
 
 class Config:
