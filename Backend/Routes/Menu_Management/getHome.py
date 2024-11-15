@@ -1,11 +1,11 @@
-# Backend/Routes/Menu_Management/main.py
+# Backend/Routes/Menu_Management/getHome.py
 from flask import Blueprint, jsonify
 
 getHome_bp = Blueprint('getHome', __name__)
 
 # route for parent directory
-@getHome_bp.route("/")
+@getHome_bp.route("/", methods = ["GET"])
 def home():
     return jsonify({
-        "message": "Welcome to the Ice Cream Store!"
+        "message": "Welcome to the Sundayz - Ice Cream Store! 🍦"
     })

@@ -5,7 +5,7 @@ from Database.db import mysql # Importing mysql connection from db.py
 getAllflavors_bp = Blueprint('getAllFlavors', __name__)
 
 # route for fetching all flavors
-@getAllflavors_bp.route("/getAllFlavors")
+@getAllflavors_bp.route("/getAllFlavors", methods = ["GET"])
 def getAllFlavors():
     try:
         cursor = mysql.connection.cursor()
@@ -17,7 +17,7 @@ def getAllFlavors():
         # Format the result into a JSON-friendly list
         flavor_list = [{"id": flavor[0], "name": flavor[1], "price": flavor[2]} for flavor in flavors]
 
-        return jsonify(flavor_list)
+        return jsonify(flavor_list), 200
     
     except mysql.connection.Error as err:
         return jsonify({
