@@ -1,12 +1,15 @@
 from flask import Flask, jsonify, request
+import mysql.connector
 
 app = Flask(__name__)
 
-ice_cream_flavors = [
-    {"id": 1, "flavor": "vanilla", "price": 3.00},
-    {"id": 2, "flavor": "chocolate", "price": 5.00},
-    {"id": 3, "flavor": "butterscotch", "price": 8.00}
-]
+# database connection config
+db_config = {
+    "host": "localhost",
+    "username": "root",
+    "password": "1482617",
+    "database": "sundayz"
+}
 
 # route for parent directory
 @app.route('/')
@@ -18,7 +21,35 @@ def home():
 # route for fetching all flavors
 @app.route('/flavor', methods = ['GET'])
 def get_flavors():
-    return jsonify(ice_cream_flavors)
+    try:
+        # connect to database
+        # The (**db_config) syntax in Python is called "argument unpacking
+        # mysql.connector.connect(host="localhost", username="root", password="1482617", database="sundayz")
+        cnx = mysql.connector.connect(**db_config)
+        cursor = cnx.cursor(dictionary = True)
+
+        # execute query to fetch all records
+        query = "SELECT * FROM flavor"
+        cursor.execute(query)
+
+        # fetch all records
+        flavors = cursor.fetchall()
+
+        # return records as JSON
+        return jsonify(flavors)
+    
+    except mysql.connector.Error as err:
+        return jsonify({
+            "error": str(err)
+        }), 500
+    
+    finally:
+        # close cursor and connection
+        if cursor:
+            cursor.close()
+        
+        if cnx:
+            cnx.close()
 
 # route for creating an order
 @app.route('/order', methods = ['POST'])
