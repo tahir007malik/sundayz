@@ -1,9 +1,9 @@
-# Backend/Routes/order.py
+# Backend/Routes/Menu_Management/order.py
 from flask import Blueprint, request, jsonify
 
-order_bp = Blueprint('order', __name__)
+addingFlavor_bp = Blueprint('addingFlavor', __name__)
 
-@order_bp.route("/order", methods=["POST"])
+@addingFlavor_bp.route("/addingFlavor", methods=["POST"])
 def order():
     data = request.get_json()
     return jsonify({

@@ -1,12 +1,12 @@
-# Backend/Routes/flavor.py
+# Backend/Routes/Menu_Management/getAllFlavors.py
 from flask import Blueprint, jsonify
 from Database.db import mysql # Importing mysql connection from db.py
 
-flavor_bp = Blueprint('flavor', __name__)
+getAllflavors_bp = Blueprint('getAllFlavors', __name__)
 
 # route for fetching all flavors
-@flavor_bp.route("/flavor")
-def flavor():
+@getAllflavors_bp.route("/getAllFlavors")
+def getAllFlavors():
     try:
         cursor = mysql.connection.cursor()
         cursor.execute(
