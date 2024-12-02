@@ -1,0 +1,6 @@
+============================
+        VENV (Linux)
+============================
+1. Create venv: python3 -m venv venv 
+2. Getting into venv: source venv/bin/activate
+3. Getting out of venv: deactivate
