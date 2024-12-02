@@ -13,11 +13,17 @@ def getAllFlavors():
             "SELECT * FROM flavor" # Execute SQL to fetch data from the 'flavor' table
         )
         flavors = cursor.fetchall() # Fetch all rows returned by the query
-        
+
         # Format the result into a JSON-friendly list
         flavor_list = [{"id": flavor[0], "name": flavor[1], "price": flavor[2]} for flavor in flavors]
-
-        return jsonify(flavor_list), 200
+        
+        if not flavor_list:
+            return jsonify({
+                "message": "No records in table",
+                "status": "error"
+            }), 404
+        else:
+            return jsonify(flavor_list), 200
     
     except mysql.connection.Error as err:
         return jsonify({

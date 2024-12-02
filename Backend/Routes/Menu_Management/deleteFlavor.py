@@ -12,46 +12,55 @@ def deleteFlavor():
     
     if not data:
         return jsonify({
-            "message": "Provide 'id' for deleting a flavor"
-        }), 400
+            "message": "Empty request body. Provide 'id' for deleting a flavor",
+            "status": "error"
+    }), 400
     else:
-        if 'id' not in data:
+        # Filtering keys entered by user
+        allowed_keys = {'id'}
+        
+        # Check if any extra keys are present in the received data
+        invalid_keys = set(data.keys()) - allowed_keys
+        
+        if invalid_keys:
             return jsonify({
-                "message": "Only 'id' is accepted. Provide 'id' for deleting a flavor"
-            }), 400
-        else:
-            if not len(data) == 1:
+                "message": f"Invalid key's detected: {', '.join(invalid_keys)}. Only 'id' is allowed.",
+                "status": "error"
+        }), 400
+        
+        # Checking if 'id' is an integer or not
+        if not isinstance(data['id'], int):
+            return jsonify({
+                "message": "'id' must be an integer",
+                "status": "error"
+        }), 400
+        
+        # Extract the flavor id from the data
+        flavor_id = data['id']
+        
+        try:
+            cursor = mysql.connection.cursor()
+            query = "DELETE FROM flavor WHERE id = %s"
+            cursor.execute(query, (flavor_id,))
+            mysql.connection.commit()
+
+            # Check if any row was deleted
+            if cursor.rowcount == 0:
                 return jsonify({
-                    "message": "Only 'id' is accepted, nothing else"
-                })
-            else:
-                # Checking if 'id' is an integer or not
-                if not isinstance(data['id'], int):
-                    return jsonify({
-                        "message": "'id' must be an integer"
-                    }), 400
-                # Extract the flavor id from the data
-                flavor_id = data['id']
+                    "message": f"Record with id: {flavor_id} not found",
+                    "status": "error"
+            }), 404
 
-                try:
-                    cursor = mysql.connection.cursor()
-                    query = "DELETE FROM flavor WHERE id = %s"
-                    cursor.execute(query, (flavor_id,))
-                    mysql.connection.commit()
-
-                    # Check if any row was deleted
-                    if cursor.rowcount == 0:
-                        return jsonify({
-                            "message": "Flavor with given id not found"
-                        }), 404
-
-                    return jsonify({
-                        "message": "Flavor deleted successfully!"
-                    }), 200
-                except mysql.connection.Error as err:
-                    return jsonify({
-                        "message": str(err)
-                    }), 500
-                finally:
-                    if cursor:
-                        cursor.close()
+            return jsonify({
+                "message": f"Record with id: {flavor_id} deleted successfully!",
+                "status": "success"
+        }), 200
+        
+        except mysql.connection.Error as err:
+            return jsonify({
+                "message": str(err)
+        }), 500
+        
+        finally:
+            if cursor:
+                cursor.close()
