@@ -10,6 +10,17 @@ def updateFlavor():
     # return jsonify({"message": "ok"}), 200
     data = request.get_json()
 
+    allowed_keys = {'id', 'name', 'price'}
+
+    # Check if any extra keys are present in the received data
+    invalid_keys = set(data.keys()) - allowed_keys
+
+    if invalid_keys:
+        return jsonify({
+            # "status": "error",
+            "message": f"Invalid keys detected: {', '.join(invalid_keys)}. Only 'id', 'name', and 'price' are allowed."
+        }), 400
+
     # Initilizing these variables for storing data['name'] and data['price']
     flavor_name = ""
     flavor_price = ""
@@ -17,39 +28,39 @@ def updateFlavor():
     # Checking whether user entered any data or not
     if not data:
         return jsonify({
-            "error": "Provide 'id' and 'name' or 'price' for updating the flavor"
+            "message": "Provide 'id' and 'name' or 'price' for updating the flavor"
         }), 400
     # Checking whether user entered 'id' or not
     else:
         if 'id' not in data:
             return jsonify({
-                "error": "Incomplete Data. Provide 'id' for updating existing flavor"
+                "message": "Incomplete Data. Provide 'id' for updating existing flavor"
             }), 400
         else:
             # Checking whether 'id' entered by user is integer type or not
             if not isinstance(data['id'], int):
                 return jsonify({
-                    "error": "'id' must be an integer"
+                    "message": "'id' must be an integer"
                 }), 400
             else:
                 flavor_id = data['id']
                 # Checking whether data contains atleast 'name' or 'price'
                 if not ('name' in data or 'price' in data):
                     return jsonify({
-                        "error": "Provide 'name' or 'price' for updating the flavor"
+                        "message": "Provide 'name' or 'price' for updating the flavor"
                     }), 400
                 # Making sure 'data' contains 2 or 3 keys
                 else:
                     if not 1 < len(data) < 4:
                         return jsonify({
-                            "error": "Can accept only 'id', 'name' or 'price'."
+                            "message": "Can accept only 'id', 'name' or 'price'."
                         }), 400
                     else:
                         if 'name' in data:
                             # Checking whether 'name' is a non-empty string or not
                             if not isinstance(data['name'], str) or not data['name'].strip():
                                 return jsonify({
-                                    "error": "'name' must be a non-empty string"
+                                    "message": "'name' must be a non-empty string"
                                 }), 400
                             flavor_name = data['name']
            
@@ -57,7 +68,7 @@ def updateFlavor():
                             # Checking whether 'price' is float type or not
                             if not isinstance(data['price'], float):
                                 return jsonify({
-                                    "error": "'price' must a float"
+                                    "message": "'price' must a float"
                                 }), 400
                             flavor_price = data['price']
 
@@ -75,7 +86,7 @@ def updateFlavor():
                             
                             if not current_record:
                                 return jsonify({
-                                    "error": f"No record with id: {flavor_id}"
+                                    "message": f"No record with id: {flavor_id}"
                                 }), 404
                             else:
                                 # Extracting name and price fetched from above query
@@ -86,7 +97,7 @@ def updateFlavor():
                                 if ((flavor_name is None or flavor_name == current_name) and (flavor_price is None or flavor_price == current_price)):
                                     return jsonify({
                                         # this will execute when 'id', 'name' and 'price' are provided
-                                        "error": "No fields updated. Same records already exists"
+                                        "message": "No fields updated. Same records already exists"
                                     }), 422
                                 
                                 # Lists for dynamically typing inside query
@@ -105,7 +116,7 @@ def updateFlavor():
                                 if not update_fields:
                                     return jsonify({
                                         # this will execute when 'id', 'name' or 'price' are provided
-                                        "error": "No fields updated. Same records already exists" 
+                                        "message": "No fields updated. Same records already exists" 
                                     }), 422
                                 
                                 values.append(flavor_id)
@@ -118,7 +129,7 @@ def updateFlavor():
                                 }), 200
                         except mysql.connection.Error as err:
                             return jsonify({
-                                "error": str(err)
+                                "message": str(err)
                             }), 500
                         finally:
                             if cursor:

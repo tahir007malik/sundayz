@@ -21,7 +21,7 @@ def getAllFlavors():
     
     except mysql.connection.Error as err:
         return jsonify({
-            "error": str(err)
+            "message": str(err)
         }), 500
     
     finally:

@@ -12,42 +12,42 @@ def addFlavor():
     
     if not data:
         return jsonify({
-            "error": "Provide 'id', 'name' and 'price' for adding a new flavor"
+            "message": "Provide 'id', 'name' and 'price' for adding a new flavor"
         }), 400
     else:
         if 'id' not in data:
             return jsonify({
-                "error": "Incomplete Data. Provide 'id' for adding a new flavor"
+                "message": "Incomplete Data. Provide 'id' for adding a new flavor"
             }), 400
         elif 'name' not in data:
             return jsonify({
-                "error": "Incomplete Data. Provide 'name' for adding a new flavor"
+                "message": "Incomplete Data. Provide 'name' for adding a new flavor"
             }), 400
         elif 'price' not in data:
             return jsonify({
-                "error": "Incomplete Data. Provide 'price' for adding a new flavor"
+                "message": "Incomplete Data. Provide 'price' for adding a new flavor"
             }), 400
         else:
             # User should provide only 3 columns
             if not len(data) == 3:
                 return jsonify({
-                    "error": "Can accept only 'id', 'name' and 'price' of the flavor"
+                    "message": "Can accept only 'id', 'name' and 'price' of the flavor"
                 }), 400
             else:
                 # Checking if 'id' is an integer or not
                 if not isinstance(data['id'], int):
                     return jsonify({
-                        "error": "'id' must be an integer"
+                        "message": "'id' must be an integer"
                     }), 400
                 # Checking if 'name' is a non-empty string or not
                 if not isinstance(data['name'], str) or not data['name'].strip():
                     return jsonify({
-                        "error": "'name' must be a non-empty string"
+                        "message": "'name' must be a non-empty string"
                     }), 400
                 # Checking if 'price' is float or not
                 if not isinstance(data['price'], float):
                     return jsonify({
-                        "error": "'price' must be a float"
+                        "message": "'price' must be a float"
                     }), 400
                 # Extractig values from data
                 flavor_id = data['id']
@@ -62,9 +62,28 @@ def addFlavor():
                     return jsonify({
                         "message": "Flavor added successfully!"
                     }), 201
+                except mysql.connection.IntegrityError as e:
+                    # Catch duplicate entry error
+                    if e.args[0] == 1062:  # Duplicate entry error code
+                        return jsonify({
+                            # "status": "error",
+                            # "code": 1062,
+                            "message": f"Duplicate entry detected for the 'flavor' table. The entry with ID '{flavor_id}' already exists. Please ensure the ID is unique.",
+                            # "details": {
+                            #     "field": "ID",
+                            #     "value": flavor_id,
+                            #     "conflict": "This value already exists in the 'flavor' table."
+                            # }
+                        }), 400
+                    # Handle other MySQL errors
+                    return jsonify({
+                        "status": "error", 
+                        "message": "Database error occurred.", 
+                        "details": str(e)
+                        }), 500
                 except mysql.connection.Error as err:
                     return jsonify({
-                        "error": str(err)
+                        "message": str(err)
                     }), 500
                 finally:
                     if cursor:

@@ -12,23 +12,23 @@ def deleteFlavor():
     
     if not data:
         return jsonify({
-            "error": "Provide 'id' for deleting a flavor"
+            "message": "Provide 'id' for deleting a flavor"
         }), 400
     else:
         if 'id' not in data:
             return jsonify({
-                "error": "No 'id' given from user. Provide 'id' for deleting a flavor"
+                "message": "Only 'id' is accepted. Provide 'id' for deleting a flavor"
             }), 400
         else:
             if not len(data) == 1:
                 return jsonify({
-                    "error": "Can accept only 'id', nothing else"
+                    "message": "Only 'id' is accepted, nothing else"
                 })
             else:
                 # Checking if 'id' is an integer or not
                 if not isinstance(data['id'], int):
                     return jsonify({
-                        "error": "'id' must be an integer"
+                        "message": "'id' must be an integer"
                     }), 400
                 # Extract the flavor id from the data
                 flavor_id = data['id']
@@ -42,7 +42,7 @@ def deleteFlavor():
                     # Check if any row was deleted
                     if cursor.rowcount == 0:
                         return jsonify({
-                            "error": "Flavor with given id not found"
+                            "message": "Flavor with given id not found"
                         }), 404
 
                     return jsonify({
@@ -50,7 +50,7 @@ def deleteFlavor():
                     }), 200
                 except mysql.connection.Error as err:
                     return jsonify({
-                        "error": str(err)
+                        "message": str(err)
                     }), 500
                 finally:
                     if cursor:
