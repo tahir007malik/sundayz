@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify
 
 getHome_bp = Blueprint('getHome', __name__)
 
-# route for parent directory
+# Route for parent directory
 @getHome_bp.route("/", methods = ["GET"])
 def home():
     return jsonify({

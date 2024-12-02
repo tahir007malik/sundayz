@@ -4,7 +4,7 @@ from Database.db import mysql # Importing mysql connection from db.py
 
 getAllflavors_bp = Blueprint('getAllFlavors', __name__)
 
-# route for fetching all flavors
+# Route for fetching all flavors
 @getAllflavors_bp.route("/getAllFlavors", methods = ["GET"])
 def getAllFlavors():
     try:
