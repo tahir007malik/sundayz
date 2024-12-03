@@ -7,5 +7,6 @@ getHome_bp = Blueprint('getHome', __name__)
 @getHome_bp.route("/", methods = ["GET"])
 def home():
     return jsonify({
-        "message": "Welcome to the Sundayz - Ice Cream Store! 🍦"
-    })
+        "message": "Welcome to the Sundayz - Ice Cream Store! 🍦",
+        "status": "success"
+    }), 200
