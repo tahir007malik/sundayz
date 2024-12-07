@@ -3,4 +3,16 @@ A simple, user-friendly app that lets customers explore flavors, view menu items
 
 ## Project (Vision)
 1. Menu Management:
-- Create getHome.py, getAllFlavor.py, addFlavor.py, updateFlavor.py, deleteFlavor.py, searchFlavor.py
+- getHome.py      | /GET
+- getAllFlavor.py | /GET
+- addFlavor.py    | /POST
+- updateFlavor.py | /PUT
+- deleteFlavor.py | /DELETE
+- searchFlavor.py | /POST
+
+2. User Management:
+- regiter.py (CREATE A NEW USER)                        | /POST
+- login.py (AUTHENTICATE AND RETURN A SESSION OR TOKEN) | /POST
+- profile.py (FETCH USER DETAILS)                       | /GET
+- updateProfile.py (UPDATE USER DETAILS)                | /PUT
+- deleteProfile.py (DELETE USER ACCOUNT)                | /DELETE
