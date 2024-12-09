@@ -1,7 +1,7 @@
 # Backend/Routes/User_Management/registerUser.py
 from flask import Blueprint, request, jsonify
 from Database.db import mysql  # Importing MySQL connection from db.py
-import re
+import re # Importing for RegEx
 
 registerUser_bp = Blueprint('registerUser', __name__)
 
