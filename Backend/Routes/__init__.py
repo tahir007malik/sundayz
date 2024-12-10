@@ -10,6 +10,9 @@ from .Menu_Management.searchFlavor import searchFlavor_bp
 # USER_MANAGEMENT
 from .User_Management.registerUser import registerUser_bp
 from .User_Management.loginUser import loginUser_bp
+from .User_Management.getUserProfile import getUserProfile_bp
+from .User_Management.updateUserProfile import updateUserProfile_bp
+# from .User_Management.deleteUserProfile import deleteUserProfile_bp
 
 def init_app(app):
     # Menu_Management_registration
@@ -23,3 +26,6 @@ def init_app(app):
     # Menu_Management_registration
     app.register_blueprint(registerUser_bp)
     app.register_blueprint(loginUser_bp)
+    app.register_blueprint(getUserProfile_bp)
+    app.register_blueprint(updateUserProfile_bp)
+    # app.register_blueprint(deleteUserProfile_bp)
