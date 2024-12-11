@@ -125,7 +125,7 @@ def updateFlavor():
                                 }), 422
                                 
                                 values.append(flavor_id)
-                                update_query = f"UPDATE flavor SET {','.join(update_fields)} WHERE id = %s"
+                                update_query = f"UPDATE flavors SET {','.join(update_fields)} WHERE id = %s"
                                 cursor.execute(update_query, values)
                                 mysql.connection.commit()
                                 return jsonify({

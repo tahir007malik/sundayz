@@ -39,7 +39,7 @@ def searchFlavor():
             flavor_name = data['name']
         try:
             cursor = mysql.connection.cursor()
-            query = "SELECT * FROM flavor WHERE name = %s"
+            query = "SELECT * FROM flavors WHERE name = %s"
             cursor.execute(query, (flavor_name,))
             
             # cursor.fetchone() returns a single record in the form a tuple (1, 'Vanilla', 2.5)

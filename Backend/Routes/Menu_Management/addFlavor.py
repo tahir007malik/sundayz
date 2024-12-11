@@ -63,7 +63,7 @@ def addFlavor():
         flavor_price = data['price']
         try:
             cursor = mysql.connection.cursor()
-            query = "INSERT INTO flavor (id, name, price) VALUES (%s, %s, %s)"
+            query = "INSERT INTO flavors (id, name, price) VALUES (%s, %s, %s)"
             cursor.execute(query, (flavor_id, flavor_name, flavor_price))
             mysql.connection.commit()
             

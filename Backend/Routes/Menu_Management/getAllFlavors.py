@@ -10,7 +10,7 @@ def getAllFlavors():
     try:
         cursor = mysql.connection.cursor()
         cursor.execute(
-            "SELECT * FROM flavor" # Execute SQL to fetch data from the 'flavor' table
+            "SELECT * FROM flavors" # Execute SQL to fetch data from the 'flavor' table
         )
         flavors = cursor.fetchall() # Fetch all rows returned by the query
 

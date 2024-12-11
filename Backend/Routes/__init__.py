@@ -14,6 +14,8 @@ from .User_Management.getUserProfile import getUserProfile_bp
 from .User_Management.updateUserProfile import updateUserProfile_bp
 from .User_Management.deleteUserProfile import deleteUserProfile_bp
 
+# ORDER_MANAGEMENT
+
 def init_app(app):
     # Menu_Management_registration
     app.register_blueprint(getHome_bp)
@@ -23,9 +25,11 @@ def init_app(app):
     app.register_blueprint(updateFlavor_bp)
     app.register_blueprint(searchFlavor_bp)
     
-    # Menu_Management_registration
+    # User_Management_registration
     app.register_blueprint(registerUser_bp)
     app.register_blueprint(loginUser_bp)
     app.register_blueprint(getUserProfile_bp)
     app.register_blueprint(updateUserProfile_bp)
     app.register_blueprint(deleteUserProfile_bp)
+    
+    # Order_Management_registration

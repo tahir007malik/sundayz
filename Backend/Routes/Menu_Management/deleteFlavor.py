@@ -40,7 +40,7 @@ def deleteFlavor():
         
         try:
             cursor = mysql.connection.cursor()
-            query = "DELETE FROM flavor WHERE id = %s"
+            query = "DELETE FROM flavors WHERE id = %s"
             cursor.execute(query, (flavor_id,))
             mysql.connection.commit()
 
