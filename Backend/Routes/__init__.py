@@ -15,6 +15,7 @@ from .User_Management.updateUserProfile import updateUserProfile_bp
 from .User_Management.deleteUserProfile import deleteUserProfile_bp
 
 # ORDER_MANAGEMENT
+from .Order_Management.createOrder import createOrder_bp
 
 def init_app(app):
     # Menu_Management_registration
@@ -33,3 +34,4 @@ def init_app(app):
     app.register_blueprint(deleteUserProfile_bp)
     
     # Order_Management_registration
+    app.register_blueprint(createOrder_bp)
