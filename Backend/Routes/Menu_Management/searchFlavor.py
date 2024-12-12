@@ -39,7 +39,7 @@ def searchFlavor():
             flavor_name = data['name']
         try:
             cursor = mysql.connection.cursor()
-            query = "SELECT * FROM flavors WHERE name = %s"
+            query = "SELECT * FROM sundayz.flavors WHERE name = %s"
             cursor.execute(query, (flavor_name,))
             
             # cursor.fetchone() returns a single record in the form a tuple (1, 'Vanilla', 2.5)
@@ -60,7 +60,8 @@ def searchFlavor():
                         # If you are using fetchall() then you need to access keys like current_record[0][0], current_record[0][1], ...
                         "id": current_record[0],  
                         "name": current_record[1],
-                        "price": current_record[2]
+                        "price": current_record[2],
+                        "quantity": current_record[3]
                     } 
                 ]
                 return jsonify({

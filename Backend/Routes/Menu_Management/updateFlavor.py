@@ -13,24 +13,25 @@ def updateFlavor():
     # Checking whether user entered any data or not
     if not data:
         return jsonify({
-            "message": "Empty request body. Provide 'id' and 'name' or 'price' for updating the flavor",
+            "message": "Empty request body. Provide 'id' and 'name' or 'price' or 'quantity' for updating the flavor",
             "status": "error"
     }), 400
     else:
-        allowed_keys = {'id', 'name', 'price'}
+        allowed_keys = {'id', 'name', 'price', 'quantity'}
         
         # Check if any extra keys are present in the received data
         invalid_keys = set(data.keys()) - allowed_keys
         
         if invalid_keys:
             return jsonify({
-                "message": f"Invalid key's detected: {', '.join(invalid_keys)}. Only 'id', 'name', and 'price' are allowed.",
+                "message": f"Invalid key's detected: {', '.join(invalid_keys)}. Only 'id', 'name', 'price' and 'quantity' are allowed.",
                 "status": "error"
         }), 400
         
         # Initilizing these variables for storing data['name'] and data['price']
-        flavor_name = ""
-        flavor_price = ""
+        flavor_name = None
+        flavor_price = None
+        flavor_quantity = None
         
         if 'id' not in data:
             return jsonify({
@@ -46,17 +47,17 @@ def updateFlavor():
             }), 400
             else:
                 flavor_id = data['id']
-                # Checking whether data contains atleast 'name' or 'price'
-                if not ('name' in data or 'price' in data):
+                # Checking whether data contains atleast 'name' or 'price' or 'quantity'
+                if not ('name' in data or 'price' in data or 'quantity'):
                     return jsonify({
-                        "message": "Provide 'name' or 'price' for updating the flavor",
+                        "message": "Provide 'name' or 'price' or 'quantity' for updating the flavor",
                         "status": "error"
                 }), 400
-                # Making sure 'data' contains 2 or 3 keys -> (id and name) or (id and price) or (id, name and price)
+                # Making sure 'data' contains 2 - 4 keys ->
                 else:
-                    if not 1 < len(data) < 4:
+                    if not 1 < len(data) < 5:
                         return jsonify({
-                            "message": "Can accept only 'id', 'name' or 'price'.",
+                            "message": "Can accept only 'id', 'name' or 'price' or 'quantity'.",
                             "status": "error"
                     }), 400
                     else:
@@ -76,9 +77,17 @@ def updateFlavor():
                                     "status": "error"
                             }), 400
                             flavor_price = data['price']
+                        if 'quantity' in data:
+                            # Checking whether 'quantity' is int type or not
+                            if not isinstance(data['quantity'], int):
+                                return jsonify({
+                                    "message": "'quantity' must a integer",
+                                    "status": "error"
+                            }), 400
+                            flavor_quantity = data['quantity']
                         try:
                             cursor = mysql.connection.cursor()
-                            query = "SELECT name, price FROM flavor WHERE id = %s"
+                            query = "SELECT name, price, quantity FROM sundayz.flavors WHERE id = %s"
                             """ 
                             The execute method for SQL queries expects a tuple for parameters, 
                             but you're passing flavor_id directly instead of a tuple. 
@@ -94,11 +103,10 @@ def updateFlavor():
                                     "status": "error"
                             }), 404
                             else:
-                                # Extracting name and price fetched from above query
-                                current_name, current_price = current_record
-                                # print(current_record) -> ('name', 'price') -> ('PUMPKIN', 1.1)
+                                # Extracting name, price and quantity fetched from above query
+                                current_name, current_price, current_quantity = current_record
                                 # Checking for no change
-                                if ((flavor_name is None or flavor_name == current_name) and (flavor_price is None or flavor_price == current_price)):
+                                if ((flavor_name is None or flavor_name == current_name) and (flavor_price is None or flavor_price == current_price) and (flavor_quantity is None or flavor_quantity == current_quantity)):
                                     return jsonify({
                                         # this will execute when 'id', 'name' and 'price' are provided
                                         "message": "No fields updated. Same records already exists",
@@ -116,6 +124,10 @@ def updateFlavor():
                                     update_fields.append("price = %s")
                                     values.append(flavor_price)
                                 
+                                if flavor_quantity and flavor_quantity != current_quantity:
+                                    update_fields.append("quantity = %s")
+                                    values.append(flavor_quantity)
+                                
                                 # Only perform update if there are fields to update
                                 if not update_fields:
                                     return jsonify({
@@ -125,7 +137,7 @@ def updateFlavor():
                                 }), 422
                                 
                                 values.append(flavor_id)
-                                update_query = f"UPDATE flavors SET {','.join(update_fields)} WHERE id = %s"
+                                update_query = f"UPDATE sundayz.flavors SET {','.join(update_fields)} WHERE id = %s"
                                 cursor.execute(update_query, values)
                                 mysql.connection.commit()
                                 return jsonify({

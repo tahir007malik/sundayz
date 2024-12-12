@@ -13,26 +13,26 @@ def addFlavor():
     # Checking whether user entered any data or not
     if not data:
         return jsonify({
-            "message": "Empty request body. Provide 'id', 'name' and 'price' for adding a new flavor",
+            "message": "Empty request body. Provide 'id', 'name', 'price' and 'quantity' for adding a new flavor",
             "status": "error" 
     }), 400
     else:
         # Filtering keys entered by user
-        allowed_keys = {'id', 'name', 'price'}
+        allowed_keys = {'id', 'name', 'price', 'quantity'}
         
         # Check if any extra keys are present in the received data
         invalid_keys = set(data.keys()) - allowed_keys
         
         if invalid_keys:
             return jsonify({
-                "message": f"Invalid key's detected: {', '.join(invalid_keys)}. Only 'id', 'name' and 'price' are allowed.",
+                "message": f"Invalid key's detected: {', '.join(invalid_keys)}. Only 'id', 'name', 'price' and 'quantity' are allowed.",
                 "status": "error"
         }), 400
         
-        # Check if 'id', 'name', and 'price' are in the data
-        if not all(key in data for key in ('id', 'name', 'price')):
+        # Check if 'id', 'name', 'price' and 'quantity' are in the data
+        if not all(key in data for key in ('id', 'name', 'price', 'quantity')):
             return jsonify({
-                "error": "Missing required fields: id, name, and price",
+                "error": "Missing required fields: id, name, price and quantity",
                 "status": "error"
         }), 400
         
@@ -57,14 +57,22 @@ def addFlavor():
                 "status": "error"
         }), 400
         
+        # Checking if 'quantity' is an integer or not
+        if not isinstance(data['quantity'], int):
+            return jsonify({
+                "message": "'quantity' must be an integer",
+                "status": "error"
+        }), 400
+        
         # Extractig values from data
         flavor_id = data['id']
         flavor_name = data['name']
         flavor_price = data['price']
+        flavor_quantity = data['quantity']
         try:
             cursor = mysql.connection.cursor()
-            query = "INSERT INTO flavors (id, name, price) VALUES (%s, %s, %s)"
-            cursor.execute(query, (flavor_id, flavor_name, flavor_price))
+            query = "INSERT INTO sundayz.flavors (id, name, price, quantity) VALUES (%s, %s, %s, %s)"
+            cursor.execute(query, (flavor_id, flavor_name, flavor_price, flavor_quantity))
             mysql.connection.commit()
             
             return jsonify({
