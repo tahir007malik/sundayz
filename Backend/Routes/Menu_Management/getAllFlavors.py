@@ -15,7 +15,12 @@ def getAllFlavors():
         flavors = cursor.fetchall() # Fetch all rows returned by the query
 
         # Format the result into a JSON-friendly list
-        flavor_list = [{"id": flavor[0], "name": flavor[1], "price": flavor[2]} for flavor in flavors]
+        flavor_list = [{
+            "id": flavor[0], 
+            "name": flavor[1], 
+            "price": flavor[2], 
+            "quantity": flavor[3]
+            } for flavor in flavors]
         
         if not flavor_list:
             return jsonify({
