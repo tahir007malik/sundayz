@@ -63,7 +63,7 @@ def loginUser():
         user_password = data['password']
         try:
             cursor = mysql.connection.cursor()
-            query = "SELECT * FROM users WHERE email = %s AND password = %s"
+            query = "SELECT * FROM sundayz.users WHERE email = %s AND password = %s"
             cursor.execute(query, (user_email, user_password))
             result = cursor.fetchone()
             if result:

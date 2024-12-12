@@ -39,7 +39,7 @@ def getUserProfile():
             user_id = data['id']
         try:
             cursor = mysql.connection.cursor()
-            query = "SELECT * FROM users WHERE id = %s"
+            query = "SELECT * FROM sundayz.users WHERE id = %s"
             cursor.execute(query, (user_id,))
             
             # cursor.fetchone() returns a single record in the form a tuple (1, 'Vanilla', 2.5)

@@ -40,7 +40,7 @@ def deleteUserProfile():
         
         try:
             cursor = mysql.connection.cursor()
-            query = "DELETE FROM users WHERE id = %s"
+            query = "DELETE FROM sundayz.users WHERE id = %s"
             cursor.execute(query, (user_id,))
             mysql.connection.commit()
 

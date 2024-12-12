@@ -102,7 +102,7 @@ def updateUserProfile():
                             }), 400
                         try:
                             cursor = mysql.connection.cursor()
-                            query = "SELECT first_name, last_name, email, password FROM users WHERE id = %s"
+                            query = "SELECT first_name, last_name, email, password FROM sundayz.users WHERE id = %s"
                             """ 
                             The execute method for SQL queries expects a tuple for parameters, 
                             but you're passing user_id directly instead of a tuple. 
@@ -162,7 +162,7 @@ def updateUserProfile():
                                 }), 422
                                 
                                 values.append(user_id)
-                                update_query = f"UPDATE users SET {','.join(update_fields)} WHERE id = %s"
+                                update_query = f"UPDATE sundayz.users SET {','.join(update_fields)} WHERE id = %s"
                                 cursor.execute(update_query, values)
                                 mysql.connection.commit()
                                 return jsonify({
