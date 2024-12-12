@@ -57,7 +57,7 @@ def createOrder():
                 else:
                     if data['items'] == [{}]:
                         return jsonify({
-                            "message": "Empty 'items' key. Provide 'flavor_id', 'quantity'",
+                            "message": "Empty 'items' key list. Provide 'flavor_id', 'quantity'",
                             "status": "error"
                         }), 404    
                     else:
