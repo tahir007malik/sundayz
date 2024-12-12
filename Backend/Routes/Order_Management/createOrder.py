@@ -131,15 +131,15 @@ def createOrder():
                                                     total_order_price = flavor_quantity_by_user * flavor_price
                                                     
                                                     # Deducting quantity from `flavors` table
-                                                    cursor.execute("UPDATE flavors SET quantity = quantity - %s WHERE id = %s", (flavor_quantity_by_user, flavor_id))
+                                                    cursor.execute("UPDATE sundayz.flavors SET quantity = quantity - %s WHERE id = %s", (flavor_quantity_by_user, flavor_id))
                                                     
                                                     # Inserting data into `orders` tables
-                                                    query_order = "INSERT INTO orders (user_id, total_price) VALUES (%s, %s)"
+                                                    query_order = "INSERT INTO sundayz.orders (user_id, total_price) VALUES (%s, %s)"
                                                     cursor.execute(query_order, (user_id, total_order_price))
                                                     order_id = cursor.lastrowid # Getting the id of the inserted row
                                                     
                                                     # Inserting data into `order_items` table
-                                                    query_order_items = "INSERT INTO order_items (order_id, flavor_id, quantity, price) VALUES (%s, %s, %s, %s)"
+                                                    query_order_items = "INSERT INTO sundayz.order_items (order_id, flavor_id, quantity, price) VALUES (%s, %s, %s, %s)"
                                                     cursor.execute(query_order_items, (order_id, flavor_id, flavor_quantity_by_user, total_order_price))
                                                     mysql.connection.commit()
                                                     
