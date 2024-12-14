@@ -5,4 +5,9 @@
 2. Getting into venv: source venv/bin/activate
 3. Getting out of venv: deactivate
 
+============================
+        VENV (Windows)
+============================
+1. Getting into venv: venv\Scripts\activate
+
 How To Install "requirements.txt": pip3 install -r requirements.txt

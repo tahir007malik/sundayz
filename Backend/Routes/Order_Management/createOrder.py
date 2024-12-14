@@ -1,6 +1,7 @@
 # Backend/Routes/Order_Management/createOrder.py
 from flask import Blueprint, request, jsonify
 from Database.db import mysql  # Importing MySQL connection from db.py
+from collections import Counter
 
 createOrder_bp = Blueprint('createOrder', __name__)
 
@@ -59,105 +60,159 @@ def createOrder():
                         return jsonify({
                             "message": "Empty 'items' key list. Provide 'flavor_id', 'quantity'",
                             "status": "error"
-                        }), 404    
+                        }), 400  
                     else:
-                        # Check each item in 'items'
-                        for index, item in enumerate(data['items']):
-                            if not isinstance(item, dict):
-                                return jsonify({
-                                    "message": f"Each item in 'items' must be a dictionary. Invalid entry at index {index}.",
-                                    "status": "error"
-                                }), 400
-
-                            # Check for invalid keys in the item
-                            invalid_item_keys = set(item.keys()) - allowed_item_keys
-                            if invalid_item_keys:
-                                return jsonify({
-                                    "message": f"Invalid key(s) in items: {', '.join(invalid_item_keys)}. Only 'flavor_id' and 'quantity' are allowed.",
-                                    "status": "error"
-                                }), 400
-
-                            # Validate required keys in the item
-                            if 'flavor_id' not in item or not isinstance(item['flavor_id'], int):
-                                return jsonify({
-                                    "message": f"'flavor_id' must be an integer and is required in items.",
-                                    "status": "error"
-                                }), 400
-                            else:
-                                flavor_id = data['items'][0]['flavor_id']
+                        # Fetching length of 'items' key in data
+                        itemsLength = len(data['items'])
+                        
+                        # Creating 2 lists for appending invalid keys and their index from 'items' key list
+                        invalid_items_keys_list = []
+                        invalid_items_keys_index = []
+                        
+                        # Filtering invalid keys inside 'items' key list
+                        for i in range(itemsLength):
+                            # data is a dictionary which contains keys: values
+                            # keys: 'user_id', 'items' | values: 1, [{'keys': 'values'}]
+                            # allowed_items_keys is already a set type variable that is why we have to type cast data['items'][i].keys() into a set
+                            invalid_items_level_filter = set(data['items'][i].keys()) - allowed_item_keys
+                            
+                            if invalid_items_level_filter:
+                                invalid_items_keys_list.append(invalid_items_level_filter)
+                                invalid_items_keys_index.append(i)
                                 
-                                if 'quantity' not in item or not isinstance(item['quantity'], int) or item['quantity'] <= 0:
+                        if invalid_items_keys_list:
+                            return jsonify({
+                                "message": f"Invalid key(s) detected: {invalid_items_keys_list} at item-level index: {invalid_items_keys_index}. Only 'flavor_id' and 'quantity' are allowed.",
+                                "status": "error"
+                        }), 400
+                        else:
+                            # Creating 2 lists for appending missing keys and their index from 'items' key list
+                            missing_key_list = []
+                            missing_key_index_list = []
+                            
+                            # Checking whether user provided 'flavor_id' and 'quantity' inside 'items' key
+                            for i in range(itemsLength):
+                                missing_key = allowed_item_keys - data['items'][i].keys()
+                                if missing_key:
+                                    missing_key_list.append(missing_key)
+                                    missing_key_index_list.append(i)
+                            
+                            # If 'flavor_id' or 'quantity' is missing from 'items' key
+                            if missing_key_list:
+                                return jsonify({
+                                    "error": f"Missing required keys: {missing_key_list} at item-level index: {missing_key_index_list}. Only 'flavor_id' and 'quantity' are required.",
+                                    "status": "error"
+                            }), 400
+                            
+                            for i in range(itemsLength):
+                                # Checking if 'flavor_id' is an integer or not
+                                if not isinstance(data['items'][i]['flavor_id'], int):
                                     return jsonify({
-                                        "message": f"'quantity' must be a positive integer and is required in items.",
+                                        "message": "'flavor_id' must be an integer",
                                         "status": "error"
-                                    }), 400
+                                }), 400
+                                
+                                # Checking if 'quantity' is an integer or not
+                                if not isinstance(data['items'][i]['quantity'], int):
+                                    return jsonify({
+                                        "message": "'quantity' must be an integer",
+                                        "status": "error"
+                                }), 400
+                            
+                            # Preventing duplicate flavor_id in 'items' key
+                            flavor_ids = [item['flavor_id'] for item in data.get('items', [])]
+                            flavor_counts = Counter(flavor_ids)
+                            duplicates = {flavor_id: count for flavor_id, count in flavor_counts.items() if count > 1}
+
+                            if duplicates:
+                                return jsonify({
+                                    "message": f"Duplicate order for flavor_id: {', '.join(map(str, duplicates.keys()))}"
+                            }), 400
+                            
+                            # ============================================================== #
+                            #                           CONNECTION
+                            # ============================================================== #
+                            try:
+                                cursor = mysql.connection.cursor()
+                                query_userid_check = "SELECT * FROM sundayz.users WHERE id = %s"
+                                cursor.execute(query_userid_check, (user_id,))
+                                result_users = cursor.fetchone()
+                                
+                                # If no record of user found with 'user_id' provided by user
+                                if not result_users:
+                                    return jsonify({
+                                        "message": f"No user found with id: {user_id}",
+                                        "status": "error"
+                                }), 404
                                 else:
-                                    flavor_quantity_by_user = data['items'][0]['quantity']
-                                    try:
-                                        cursor = mysql.connection.cursor()
-                                        query_userid_check = "SELECT * FROM sundayz.users WHERE id = %s"
-                                        cursor.execute(query_userid_check, (user_id,))
+                                    query_flavorid_check = "SELECT * FROM sundayz.flavors WHERE id = %s"
+                                    total_order_price = 0
+                                    for i in range(itemsLength):
+                                        flavor_id = data['items'][i]['flavor_id']
+                                        flavor_quantity_user = data['items'][i]['quantity']
+                                        cursor.execute(query_flavorid_check, (flavor_id,))
+                                        flavor_table_result = cursor.fetchone()
                                         
-                                        # cursor.fetchone() returns a single record in the form a tuple
-                                        # cursor.fetchall() returns all records in the form of tuple inside a list
-                                        result_users = cursor.fetchone()
-                                        
-                                        # If no record of user found with 'user_id' provided by user
-                                        if not result_users:
+                                        if not flavor_table_result:
                                             return jsonify({
-                                                "message": f"No user found with id: {user_id}",
+                                                "message": f"No flavor found with id: {flavor_id} at index: {i}",
                                                 "status": "error"
                                         }), 404
-                                        else:
-                                            query_flavorid_check = "SELECT * FROM sundayz.flavors WHERE id = %s"
-                                            cursor.execute(query_flavorid_check, (flavor_id,))
-                                            result_flavors = cursor.fetchone()
-                                            
-                                            # If no record of flavor found with 'flavor_id' provided by user
-                                            if not result_flavors:
-                                                return jsonify({
-                                                    "message": f"No flavor found with id: {flavor_id}",
-                                                    "status": "error"
-                                                }), 404
-                                            else:
-                                                flavor_price = result_flavors[2]
-                                                flavor_quantity_in_db = result_flavors[3]
-                                                if not (flavor_quantity_in_db > flavor_quantity_by_user):
-                                                    return jsonify({
-                                                        "message": f"Order can't be placed as flavor quantity is only: {flavor_quantity_in_db}. Available quantity: {flavor_quantity_in_db}",
-                                                        "status": "error"
-                                                    }), 400
-                                                else:
-                                                    total_order_price = flavor_quantity_by_user * flavor_price
-                                                    
-                                                    # Deducting quantity from `flavors` table
-                                                    cursor.execute("UPDATE sundayz.flavors SET quantity = quantity - %s WHERE id = %s", (flavor_quantity_by_user, flavor_id))
-                                                    
-                                                    # Inserting data into `orders` tables
-                                                    query_order = "INSERT INTO sundayz.orders (user_id, total_price) VALUES (%s, %s)"
-                                                    cursor.execute(query_order, (user_id, total_order_price))
-                                                    order_id = cursor.lastrowid # Getting the id of the inserted row
-                                                    
-                                                    # Inserting data into `order_items` table
-                                                    query_order_items = "INSERT INTO sundayz.order_items (order_id, flavor_id, quantity, price) VALUES (%s, %s, %s, %s)"
-                                                    cursor.execute(query_order_items, (order_id, flavor_id, flavor_quantity_by_user, total_order_price))
-                                                    mysql.connection.commit()
-                                                    
-                                                    return jsonify({
-                                                        "message": "Order created successfully",
-                                                        "status": "success",
-                                                        "order_id": order_id,
-                                                        "total_price": total_order_price
-                                                    }), 201
-                                            
-                                    except mysql.connection.Error as err:
-                                        mysql.connection.rollback()
-                                        return jsonify({
-                                            "message": "Database error occurred.", 
-                                            "status": "error", 
-                                            "details": str(err)
-                                        }), 500
+                                        
+                                        flavor_price_db = flavor_table_result[2]
+                                        flavor_quantity_db = flavor_table_result[3]
+                                        
+                                        if not (flavor_quantity_db > flavor_quantity_user):
+                                            return jsonify({
+                                                "message": f"Order can't be placed for flavor_id: {flavor_id}. Requested quantity: {flavor_quantity_user}, Available quantity: {flavor_quantity_db}",
+                                                "status": "error"
+                                        }), 400
+                                        
+                                        # Deducting quantity from 'flavors' table
+                                        cursor.execute("UPDATE sundayz.flavors SET quantity = quantity - %s WHERE id = %s", (flavor_quantity_user, flavor_id))
+                                        
+                                        # Calculating per item price
+                                        item_price = flavor_price_db * flavor_quantity_user
+                                        
+                                        # Calculating total order price for whole order
+                                        total_order_price += item_price
+                                        
+                                    # Inserting data into 'orders' tables
+                                    query_order = "INSERT INTO sundayz.orders (user_id, total_price) VALUES (%s, %s)"
+                                    cursor.execute(query_order, (user_id, total_order_price))
+                                    order_id = cursor.lastrowid # Getting the id of the inserted row
                                     
-                                    finally:
-                                        if cursor:
-                                            cursor.close()
+                                    # Inserting data into `order_items` table
+                                    for i in range(itemsLength):
+                                        flavor_id = data['items'][i]['flavor_id']
+                                        flavor_quantity_user = data['items'][i]['quantity']
+                                        cursor.execute(query_flavorid_check, (flavor_id,))
+                                        flavor_table_result = cursor.fetchone()
+                                        
+                                        flavor_price_db = flavor_table_result[2]
+                                        item_price = flavor_price_db * flavor_quantity_user
+                                        
+                                        query_order_items = "INSERT INTO sundayz.order_items (order_id, flavor_id, quantity, price) VALUES (%s, %s, %s, %s)"
+                                        cursor.execute(query_order_items, (order_id, flavor_id, flavor_quantity_user, item_price))
+                                    
+                                    # Commiting changes to database
+                                    mysql.connection.commit()
+                                    
+                                    return jsonify({
+                                        "message": "Order created successfully",
+                                        "status": "success",
+                                        "order_id": order_id,
+                                        f"total_price": total_order_price
+                                    }), 201
+                                    
+                            except mysql.connection.Error as err:
+                                mysql.connection.rollback()
+                                return jsonify({
+                                    "message": "Database error occurred.", 
+                                    "status": "error", 
+                                    "details": str(err)
+                                }), 500
+                            
+                            finally:
+                                if cursor:
+                                    cursor.close()
