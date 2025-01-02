@@ -62,9 +62,7 @@ def getUserProfile():
                         "first_name": current_record[1],
                         "last_name": current_record[2],
                         "email": current_record[3],
-                        "password": current_record[4],
-                        "created_at": current_record[5],
-                        "updated_at": current_record[6]
+                        "password": current_record[4]
                     } 
                 ]
                 return jsonify({

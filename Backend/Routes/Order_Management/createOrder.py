@@ -152,6 +152,7 @@ def createOrder():
                                         flavor_quantity_user = data['items'][i]['quantity']
                                         cursor.execute(query_flavorid_check, (flavor_id,))
                                         flavor_table_result = cursor.fetchone()
+                                        # print(flavor_table_result) # Debugging: (id, name, price, quantity): (1, 'Vanilla', '5.99', '100')
                                         
                                         if not flavor_table_result:
                                             return jsonify({
@@ -162,6 +163,7 @@ def createOrder():
                                         flavor_price_db = flavor_table_result[2]
                                         flavor_quantity_db = flavor_table_result[3]
                                         
+                                        # If requested quantity is greater than available quantity in 'flavors' table
                                         if not (flavor_quantity_db > flavor_quantity_user):
                                             return jsonify({
                                                 "message": f"Order can't be placed for flavor_id: {flavor_id}. Requested quantity: {flavor_quantity_user}, Available quantity: {flavor_quantity_db}",
@@ -198,6 +200,8 @@ def createOrder():
                                     # Commiting changes to database
                                     mysql.connection.commit()
                                     
+                                    # Rounding total_order_price to 2 decimal places
+                                    total_order_price = round(total_order_price, 2)
                                     return jsonify({
                                         "message": "Order created successfully",
                                         "status": "success",
