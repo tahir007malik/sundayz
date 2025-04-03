@@ -69,12 +69,13 @@ def loginUser():
             if result:
                 # if matching records are found then redirect the user to /getHome
                 return jsonify({
-                    "message": "login successfull!. Redirecting to 127.0.0.1:5000/getHome",
-                    "status": "success"
-                }), 200
+                "message": "Login successful! Redirecting...",
+                "status": "success",
+                "redirect_url": "/home"
+            }), 200
             else:
                 return jsonify({
-                    "message": f"No user found with email: {user_email} and password: {user_password}",
+                    "message": f"Invalid email or password",
                     "status": "error"
                 }), 404
         except mysql.connection.Error as err:

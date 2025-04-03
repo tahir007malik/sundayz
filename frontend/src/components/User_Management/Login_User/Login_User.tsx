@@ -1,29 +1,24 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import './Register_User.css';
+import { useNavigate, Link } from "react-router-dom";
+import "./Login_User.css";
 
-const Signup = () => {
-    const [formData, setFormData] = useState({
-        first_name: "",
-        last_name: "",
-        email: "",
-        password: "",
-    });
-
+const Login = () => {
+    const [formData, setFormData] = useState({ email: "", password: "" });
     const [message, setMessage] = useState("");
     const [showPopup, setShowPopup] = useState(false);
+    const navigate = useNavigate(); // Hook for redirection
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setMessage("Registering...");
-        setShowPopup(true); // Show popup immediately
+        setMessage("Logging in...");
+        setShowPopup(true); // Show popup immediately when login starts
 
         try {
-            const response = await fetch("http://localhost:8000/registerUser", {
+            const response = await fetch("http://localhost:8000/loginUser", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
@@ -31,8 +26,17 @@ const Signup = () => {
 
             const data = await response.json();
             setMessage(data.message);
+            setShowPopup(true); // Ensure pop-up displays
+
+            if (response.ok) {
+                setTimeout(() => {
+                    setShowPopup(false);
+                    navigate(data.redirect_url); // Redirect to home
+                }, 1500);
+            }
         } catch (error) {
-            setMessage("Error: Unable to register");
+            setMessage("Error: Unable to login");
+            setShowPopup(true);
         }
     };
 
@@ -41,17 +45,15 @@ const Signup = () => {
     };
 
     return (
-        <div className="signup-container">
-            <h2>Sign Up</h2><br />
+        <div className="login-container">
+            <h2>Login</h2><br />
             <form onSubmit={handleSubmit}>
-                <input type="text" name="first_name" placeholder="First Name" value={formData.first_name} onChange={handleChange} required />
-                <input type="text" name="last_name" placeholder="Last Name" value={formData.last_name} onChange={handleChange} required />
                 <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
                 <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
-                <button type="submit">Register</button>
+                <button type="submit">Login</button>
             </form><br />
-            <p className="login-link">
-                Already have an account? <Link to="/">Login</Link>
+            <p className="signup-link">
+                Create a new account here! <Link to="/signup">Signup</Link>
             </p>
 
             {/* Popup Modal */}
@@ -67,4 +69,4 @@ const Signup = () => {
     );
 };
 
-export default Signup;
+export default Login;
