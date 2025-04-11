@@ -13,6 +13,7 @@ from .User_Management.loginUser import loginUser_bp
 from .User_Management.getUserProfile import getUserProfile_bp
 from .User_Management.updateUserProfile import updateUserProfile_bp
 from .User_Management.deleteUserProfile import deleteUserProfile_bp
+from .User_Management.logoutUser import logout_bp
 
 # ORDER_MANAGEMENT
 from .Order_Management.createOrder import createOrder_bp
@@ -32,6 +33,7 @@ def init_app(app):
     app.register_blueprint(getUserProfile_bp)
     app.register_blueprint(updateUserProfile_bp)
     app.register_blueprint(deleteUserProfile_bp)
+    app.register_blueprint(logout_bp)
     
     # Order_Management_registration
     app.register_blueprint(createOrder_bp)

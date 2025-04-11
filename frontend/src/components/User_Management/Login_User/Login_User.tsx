@@ -22,6 +22,7 @@ const Login = () => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
+                credentials: "include", // Include cookies with requests
             });
 
             const data = await response.json();
@@ -50,7 +51,7 @@ const Login = () => {
             <form onSubmit={handleSubmit}>
                 <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
                 <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
-                <button type="submit">Login</button>
+                <button type="submit" className="login-submit-btn">Login</button>
             </form><br />
             <p className="signup-link">
                 Create a new account here! <Link to="/signup">Signup</Link>

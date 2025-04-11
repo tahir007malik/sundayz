@@ -38,10 +38,11 @@ input {
 }
 
 /* 🎨 Customized Register Button */
-button {
+.signup-submit-btn {
+    width: 70%;
     margin-top: 12px;
     padding: 12px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     color: white;
     background: linear-gradient(135deg, #ff758c, #ff7eb3);
@@ -53,14 +54,14 @@ button {
 }
 
 /* Hover Effect */
-button:hover {
+.signup-submit-btn:hover {
     background: linear-gradient(135deg, #ff6381, #ff85a2);
     transform: scale(1.05);
     box-shadow: 0px 6px 14px rgba(255, 118, 136, 0.6);
 }
 
 /* Active (Click) Effect */
-button:active {
+.signup-submit-btn:active {
     transform: scale(0.95);
     box-shadow: 0px 3px 8px rgba(255, 118, 136, 0.3);
 }

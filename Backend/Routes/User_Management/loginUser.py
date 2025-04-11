@@ -1,5 +1,5 @@
 # Backend/Routes/User_Management/loginUser.py
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 from Database.db import mysql  # Importing MySQL connection from db.py
 import re # Importing for RegEx
 
@@ -68,6 +68,8 @@ def loginUser():
             result = cursor.fetchone()
             if result:
                 # if matching records are found then redirect the user to /getHome
+                session['user'] = user_email # setting session key for authenticated user
+                # print(f"Session content: {session}")
                 return jsonify({
                 "message": "Login successful! Redirecting...",
                 "status": "success",

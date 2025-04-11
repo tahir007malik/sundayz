@@ -1,0 +1,75 @@
+.home-container {
+    display: flex;
+    background-color: rgb(211, 211, 211);
+    justify-content: space-around;
+    padding: 30px;
+}
+
+.logout-btn {
+    background-color: rgb(208, 199, 241);
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform ease 0.3s;
+}
+
+.logout-btn:hover {
+    transform: scale(1.5);
+}
+
+@keyframes gradientChange {
+    0% {
+        background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+    }
+    20% {
+        background: linear-gradient(45deg, #a18cd1, #fbc2eb);
+    }
+    40% {
+        background: linear-gradient(45deg, #ffecd2, #fcb69f);
+    }
+    60% {
+        background: linear-gradient(45deg, #f6d365, #fda085);
+    }
+    80% {
+        background: linear-gradient(45deg, #84fab0, #8fd3f4);
+    }
+    100% {
+        background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+    }
+}
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #7d53dd;
+    color: rgb(255, 255, 255);
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    opacity: 1;
+    animation: fade-in-out 3s forwards;
+}
+
+/* Toast animation for smooth entry and exit */
+@keyframes fade-in-out {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    10% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    90% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}

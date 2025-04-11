@@ -1,28 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Home.css";
 
-const Home = () => {
-    const [message, setMessage] = useState("Loading...");
-    const [status, setStatus] = useState(""); // Track status ('success' or 'error')
-    const [toastMessage, setToastMessage] = useState<string | null>(null); // State for toast message
+const Logout = () => {
     const navigate = useNavigate();
-
-    useEffect(() => {
-        fetch("http://localhost:8000/", {
-            method: "GET",
-            credentials: "include", // Include session credentials
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setMessage(data.message); // Set the message directly from backend
-                setStatus(data.status); // Track status for conditional styling
-            })
-            .catch(() => {
-                setMessage("An unexpected error occurred.");
-                setStatus("error");
-            });
-    }, []);
+    const [toastMessage, setToastMessage] = useState<string | null>(null); // State for toast message
 
     const handleLogout = async () => {
         try {
@@ -51,22 +32,17 @@ const Home = () => {
     };
 
     return (
-        <div className="home-container">
-            <h3 className={status === "error" ? "error-text" : "success-text"}>
-                {message}
-            </h3>
-            {status === "success" && (
-                <button onClick={handleLogout} className="logout-btn">
-                    Logout
-                </button>
-            )}
+        <>
+            <button onClick={handleLogout} className="logout-btn">
+                Logout
+            </button>
             {toastMessage && (
                 <div className="toast">
                     {toastMessage}
                 </div>
             )}
-        </div>
+        </>
     );
 };
 
-export default Home;
+export default Logout;

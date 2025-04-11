@@ -48,10 +48,10 @@ const Signup = () => {
                 <input type="text" name="last_name" placeholder="Last Name" value={formData.last_name} onChange={handleChange} required />
                 <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
                 <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
-                <button type="submit">Register</button>
+                <button type="submit" className="signup-submit-btn">Register</button>
             </form><br />
             <p className="login-link">
-                Already have an account? <Link to="/">Login</Link>
+                Already have an account? <Link to="/login">Login</Link>
             </p>
 
             {/* Popup Modal */}
