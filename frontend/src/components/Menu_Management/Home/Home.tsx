@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Flavors from "../Flavors/Flavors.tsx";
+import SearchFlavor from "../Search_Flavor/Search_Flavor.tsx";
 import "./Home.css";
 
 const Home = () => {
@@ -13,14 +15,23 @@ const Home = () => {
             method: "GET",
             credentials: "include", // Include session credentials
         })
-            .then((response) => response.json())
-            .then((data) => {
-                setMessage(data.message); // Set the message directly from backend
-                setStatus(data.status); // Track status for conditional styling
+            .then((response) => {
+                if (response.status === 403) {
+                    setToastMessage("Unauthorized access."); // Show unauthorized access toast
+                    setStatus("error");
+                    throw new Error("Unauthorized"); // Prevent further processing
+                }
+                return response.json();
             })
-            .catch(() => {
-                setMessage("An unexpected error occurred.");
-                setStatus("error");
+            .then((data) => {
+                setMessage(data.message); // Set the message from backend
+                setStatus(data.status);
+            })
+            .catch((error) => {
+                if (error.message !== "Unauthorized") {
+                    setToastMessage("An unexpected error occurred."); // Show error toast
+                    setStatus("error");
+                }
             });
     }, []);
 
@@ -52,17 +63,28 @@ const Home = () => {
 
     return (
         <div className="home-container">
-            <h3 className={status === "error" ? "error-text" : "success-text"}>
-                {message}
-            </h3>
-            {status === "success" && (
-                <button onClick={handleLogout} className="logout-btn">
-                    Logout
-                </button>
-            )}
+            <div className="home-container-header">
+                <h3 className={status === "error" ? "error-text" : "success-text"}>{message}</h3>
+                {status === "success" && (
+                    <button onClick={handleLogout} className="logout-btn">
+                        Logout
+                    </button>
+                )}
+            </div>
+            <div className="home-body-container">
+                <div className="flavors-container">
+                    <h4>Flavors</h4>
+                    <Flavors />
+                </div>
+                <div className="search-flavors-container">
+                    <h4>Search Flavor</h4>
+                    <SearchFlavor />    
+                </div>
+            </div>
             {toastMessage && (
                 <div className="toast">
                     {toastMessage}
+                    <button onClick={() => setToastMessage(null)} className="toast-close-btn">✖</button>
                 </div>
             )}
         </div>

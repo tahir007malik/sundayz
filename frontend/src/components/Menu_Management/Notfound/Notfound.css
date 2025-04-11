@@ -1,17 +1,29 @@
-.landing-container {
+.not-found-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
     text-align: center;
-    background: linear-gradient(135deg, #eaaffc, #fad0c4, #ffbfad, #c5ebf5, #a78ce6);
-    background-size: 300% 300%;
-    animation: gradient-animation 10s ease infinite;
+    background-color: #f7f9fc;
+    color: #333;
 }
 
-.landing-btn-nav {
-    width: 100%;
+.not-found-title {
+    font-size: 8rem;
+    font-weight: bold;
+    margin: 0;
+    color: #ff7eb3;
+}
+
+.not-found-message {
+    font-size: 1.5rem;
+    margin: 10px 0 20px;
+    color: #000000;
+}
+
+.back-home-btn {
+    width: 12.5%;
     padding: 12px;
     background: linear-gradient(135deg, #ff758c, #ff7eb3);
     color: white;
@@ -25,25 +37,8 @@
     box-shadow: 0px 5px 15px rgba(255, 118, 136, 0.4);
 }
 
-.landing-btn-nav:hover {
+.back-home-btn:hover {
     background: linear-gradient(135deg, #ff5a77, #ff6a9f);
     transform: scale(1.05);
     box-shadow: 0px 8px 20px rgba(255, 118, 136, 0.6);
-}
-
-.landing-btn-nav:active {
-    transform: scale(0.98);
-    box-shadow: 0px 3px 10px rgba(255, 118, 136, 0.3);
-}
-
-@keyframes gradient-animation {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
 }

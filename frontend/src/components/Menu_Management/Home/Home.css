@@ -1,15 +1,20 @@
-.home-container {
+/* Header container */
+.home-container-header {
     display: flex;
-    background-color: rgb(211, 211, 211);
+    background-color: rgb(250, 250, 250);
     justify-content: space-around;
     padding: 30px;
+    border: 2px solid #e9e0ff;
+    border-radius: 5px;
+    margin: 10px;
 }
 
+/* Logout button */
 .logout-btn {
-    background-color: rgb(208, 199, 241);
-    padding: 5px;
+    background-color: #d0bffa;
+    padding: 3px 15px;
     border: none;
-    border-radius: 5px;
+    border-radius: 20px;
     cursor: pointer;
     font-size: 16px;
     transition: transform ease 0.3s;
@@ -19,27 +24,45 @@
     transform: scale(1.5);
 }
 
-@keyframes gradientChange {
-    0% {
-        background: linear-gradient(45deg, #ff9a9e, #fad0c4);
-    }
-    20% {
-        background: linear-gradient(45deg, #a18cd1, #fbc2eb);
-    }
-    40% {
-        background: linear-gradient(45deg, #ffecd2, #fcb69f);
-    }
-    60% {
-        background: linear-gradient(45deg, #f6d365, #fda085);
-    }
-    80% {
-        background: linear-gradient(45deg, #84fab0, #8fd3f4);
-    }
-    100% {
-        background: linear-gradient(45deg, #ff9a9e, #fad0c4);
-    }
+.home-body-container {
+    display: flex;
+    justify-content: space-evenly;
 }
 
+.home-body-container > h4 {
+    text-align: center;
+    color: #7d53dd; 
+}
+
+.flavors-container {
+    background-color: rgb(250, 250, 250);
+    border: 2px solid #e9e0ff;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    max-width: min-content;
+}
+
+.flavors-container > h4 {
+    text-align: center;
+    color: #7d53dd;
+}
+
+.search-flavors-container {
+    background-color: rgb(250, 250, 250);
+    border: 2px solid #e9e0ff;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    max-height: min-content;
+}
+
+.search-flavors-container > h4 {
+    text-align: center;
+    color: #7d53dd;
+}
+
+/* Toast message */
 .toast {
     position: fixed;
     bottom: 20px;
@@ -52,6 +75,20 @@
     z-index: 1000;
     opacity: 1;
     animation: fade-in-out 3s forwards;
+}
+
+/* Close button for toast */
+.toast-close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.toast-close-btn:hover {
+    color: #ffdddd;
 }
 
 /* Toast animation for smooth entry and exit */

@@ -1,0 +1,61 @@
+.search-flavor-container {
+    background-color: rgb(250, 250, 250);
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 400px;
+    text-align: center;
+}
+
+.search-input-container {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 0.5em;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.search-button {
+    padding: 0 .5em;
+    background-color: #d0bffa;
+    color: white;
+    border: none;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color .5s ease;
+}
+
+.search-button:hover {
+    background-color: #9c76fc;
+}
+
+.error-message {
+    color: rgb(4, 0, 255);
+    margin-top: 10px;
+}
+
+.flavor-result {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.flavor-details-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.flavor-details-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+.flavor-details-table tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}

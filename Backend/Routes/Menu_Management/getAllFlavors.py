@@ -18,7 +18,7 @@ def getAllFlavors():
         flavor_list = [{
             "id": flavor[0], 
             "name": flavor[1], 
-            "price": flavor[2], 
+            "price": float(flavor[2]), 
             "quantity": flavor[3]
             } for flavor in flavors]
         

@@ -60,7 +60,7 @@ def searchFlavor():
                         # If you are using fetchall() then you need to access keys like current_record[0][0], current_record[0][1], ...
                         "id": current_record[0],  
                         "name": current_record[1],
-                        "price": current_record[2],
+                        "price": float(current_record[2]),
                         "quantity": current_record[3]
                     } 
                 ]
