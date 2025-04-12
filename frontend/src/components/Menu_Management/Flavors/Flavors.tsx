@@ -7,7 +7,7 @@ const Flavors: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const rowsPerPage = 5;
+    const rowsPerPage = 10;
 
     useEffect(() => {
         const fetchFlavors = async () => {
