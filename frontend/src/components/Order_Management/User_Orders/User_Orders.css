@@ -1,28 +1,133 @@
-.user-orders-container-body-details > p {
-    background-color: rgb(250, 250, 250);
-    border: 1px solid #ddd;
-    border-radius: 2px;
+/* General container styling */
+.user-orders-container-head {
+    font-family: Arial, sans-serif;
     padding: 20px;
-    margin: 20px 0;
-    max-width: 400px;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: 8px;
 }
 
+/* Heading */
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+/* Body of the orders container */
+.user-orders-container-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+/* Order details card styling */
+.user-orders-container-body-details {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.user-orders-container-body-details p {
+    margin: 0;
+    color: #555;
+}
+
+strong {
+    color: #333;
+}
+
+.toggle-details-button {
+    background-color: #d0bffa;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-details-button:hover {
+    background-color: #9c76fc;
+}
+
+/* If no orders are present */
+.user-orders-container-head p {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #777;
+}
+
+/* Modal styles (unchanged) */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #555;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover {
+    color: #000;
+}
+
+/* Table styling (unchanged) */
 .user-orders-container-body-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 1rem;
     text-align: left;
-    min-width: 600px;
-    margin: 1em 0;
+    margin-top: 1em;
 }
 
 .user-orders-container-body-table th,
 .user-orders-container-body-table td {
     padding: 0.75em;
     border: 1px solid #ddd;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
 }
 
 .user-orders-container-body-table th {
@@ -32,4 +137,20 @@
 
 .user-orders-container-body-table tr:nth-child(even) {
     background-color: #f9f9f9;
+}
+
+/* For small screens: */
+@media (max-width: 768px) {
+    .user-orders-container-head {
+        padding: 15px;
+    }
+
+    .user-orders-container-body-details {
+        padding: 10px;
+    }
+
+    .toggle-details-button {
+        padding: 3px 8px;
+        font-size: 0.9rem;
+    }
 }
