@@ -6,7 +6,7 @@ logout_bp = Blueprint('logout', __name__)
 # Route for logging out the user
 @logout_bp.route("/logout", methods=["POST"])
 def logout():
-    if 'user' in session:
+    if 'user_id' in session:
         session.clear()  # Clear the entire session
         # print(f"Session after clearing: {session}")
         return jsonify({

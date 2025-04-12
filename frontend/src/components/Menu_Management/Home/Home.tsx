@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Flavors from "../Flavors/Flavors.tsx";
 import SearchFlavor from "../Search_Flavor/Search_Flavor.tsx";
 import "./Home.css";
+import UserOrders from "../../Order_Management/User_Orders/User_Orders.tsx";
 
 const Home = () => {
     const [message, setMessage] = useState("Loading...");
@@ -79,6 +80,10 @@ const Home = () => {
                 <div className="search-flavors-container">
                     <h4>Search Flavor</h4>
                     <SearchFlavor />    
+                </div>
+                <div className="user-orders-container">
+                    <h4>My Orders</h4>
+                    <UserOrders />    
                 </div>
             </div>
             {toastMessage && (

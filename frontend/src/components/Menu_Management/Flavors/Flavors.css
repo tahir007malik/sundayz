@@ -1,6 +1,8 @@
 .flavors-table-container {
     overflow-x: auto;
     margin: 1em 0;
+    max-width: 100%;
+    min-height: 250px; /* Consistent minimum height */
 }
 
 .flavors-table {
@@ -8,12 +10,16 @@
     border-collapse: collapse;
     font-size: 1rem;
     text-align: left;
+    min-width: 600px; /* Prevent excessive collapsing */
 }
 
 .flavors-table th,
 .flavors-table td {
     padding: 0.75em;
     border: 1px solid #ddd;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .flavors-table th {
@@ -41,7 +47,9 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color .5s ease;
 }
+
 .pagination-controls button:hover {
     background-color: #9c76fc;
 }

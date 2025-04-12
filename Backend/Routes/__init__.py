@@ -17,6 +17,7 @@ from .User_Management.logoutUser import logout_bp
 
 # ORDER_MANAGEMENT
 from .Order_Management.createOrder import createOrder_bp
+from .Order_Management.ordersFromUser import ordersFromUser_bp
 
 def init_app(app):
     # Menu_Management_registration
@@ -37,3 +38,4 @@ def init_app(app):
     
     # Order_Management_registration
     app.register_blueprint(createOrder_bp)
+    app.register_blueprint(ordersFromUser_bp)

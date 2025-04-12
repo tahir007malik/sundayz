@@ -7,7 +7,7 @@ const Flavors: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const rowsPerPage = 4;
+    const rowsPerPage = 5;
 
     useEffect(() => {
         const fetchFlavors = async () => {
@@ -67,7 +67,7 @@ const Flavors: React.FC = () => {
                         <th>ID</th>
                         <th>Name</th>
                         <th>Price</th>
-                        <th>Quantity</th>
+                        <th>Available</th>
                     </tr>
                 </thead>
                 <tbody>
