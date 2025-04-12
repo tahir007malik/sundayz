@@ -68,7 +68,10 @@ def loginUser():
             result = cursor.fetchone()
             if result:
                 # if matching records are found then redirect the user to /getHome
-                session['user'] = user_email # setting session key for authenticated user
+                # setting session key for authenticated user
+                session['user_id'] = result[0]
+                session['user_first_name'] = result[1]
+                session['user_email'] = result[3]
                 # print(f"Session content: {session}")
                 return jsonify({
                 "message": "Login successful! Redirecting...",
