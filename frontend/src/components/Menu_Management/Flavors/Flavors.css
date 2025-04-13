@@ -11,6 +11,9 @@
     font-size: 1rem;
     text-align: left;
     min-width: 600px; /* Prevent excessive collapsing */
+    border-radius: 8px; /* Smooth corners for the table */
+    overflow: hidden; /* Clips content overflowing the rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Added shadow */
 }
 
 .flavors-table th,
@@ -47,7 +50,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color .5s ease;
+    transition: background-color 0.5s ease;
 }
 
 .pagination-controls button:hover {

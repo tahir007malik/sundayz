@@ -58,7 +58,7 @@ const SearchFlavor: React.FC = () => {
 
             {flavor && (
                 <div className="flavor-result">
-                    <h4>Flavor Details</h4>
+                    {/* <h4>Flavor Details</h4> */}
                     <table className="flavor-details-table">
                         <tbody>
                             <tr>

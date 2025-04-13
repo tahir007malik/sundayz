@@ -139,6 +139,39 @@ strong {
     background-color: #f9f9f9;
 }
 
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 1em;
+}
+
+.pagination-controls button {
+    padding: 0.5em 1em;
+    background-color: #d0bffa;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+}
+
+.pagination-controls button:hover {
+    background-color: #9c76fc;
+}
+
+.pagination-controls button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.pagination-controls span {
+    font-size: 1rem;
+}
+
+
 /* For small screens: */
 @media (max-width: 768px) {
     .user-orders-container-head {
