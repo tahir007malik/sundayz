@@ -6,6 +6,7 @@ from .Menu_Management.addFlavor import addFlavor_bp
 from .Menu_Management.deleteFlavor import deleteFlavor_bp
 from .Menu_Management.updateFlavor import updateFlavor_bp
 from .Menu_Management.searchFlavor import searchFlavor_bp
+from .Menu_Management.searchFlavorById import searchFlavorById_bp
 
 # USER_MANAGEMENT
 from .User_Management.registerUser import registerUser_bp
@@ -27,6 +28,7 @@ def init_app(app):
     app.register_blueprint(deleteFlavor_bp)
     app.register_blueprint(updateFlavor_bp)
     app.register_blueprint(searchFlavor_bp)
+    app.register_blueprint(searchFlavorById_bp)
     
     # User_Management_registration
     app.register_blueprint(registerUser_bp)

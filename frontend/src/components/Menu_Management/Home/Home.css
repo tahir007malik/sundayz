@@ -51,6 +51,7 @@
 /* Individual section styling */
 .flavors-container,
 .search-flavors-container,
+.create-order-container,
 .user-orders-container {
     background-color: rgb(250, 250, 250);
     border: 2px solid #e9e0ff;
@@ -62,6 +63,7 @@
 
 .flavors-container h4,
 .search-flavors-container h4,
+.create-order-container h4,
 .user-orders-container h4 {
     text-align: center;
     color: #7d53dd;
@@ -124,6 +126,7 @@
 
     .flavors-container,
     .search-flavors-container,
+    .create-order-container,
     .user-orders-container {
         flex: none;
         width: 100%; /* Take full width in small screens */
